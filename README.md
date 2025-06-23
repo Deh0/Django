@@ -19,9 +19,11 @@ pip install > requirements.txt (gerar o arquivo requeriments.txt com base nas de
 
 **Definir o nome do seu projeto**
 
-django-admin startproject meu_projeto 
+django-admin startproject meu_projeto .
 
-Exemplo: django-admin startproject Ecomerce
+Exemplo: django-admin startproject Raiz_do_meu_projeto . 
+
+O ponto serve para não criar uma pasta extra sem necessidade.
 
 # 4° Passo: Configurar o seu projeto:
 
@@ -32,7 +34,9 @@ Criar um .gitignore para ignorar venv/ .pyc __pycache__/ .env ...
 
 # 5° Passo: Criar um app Django:
 
-python manage.py startapp core
+python manage.py startapp Ecomerce 
+
+Aqui é o seu app, pode colocar o nome que você quiser, só não esquece de configurar esse nome no settings da raiz do seu projeto em INSTALLED_APPS 
 
 # 6° Passo: Fazer o primeiro commit local:
 
