@@ -47,4 +47,28 @@ git add .
 git commit -m "Inicializar projeto Django com app core"
 git push origin main
 
+# Criar arquivos HTML
+
+No seu app que você criou onde tem models.py, apps.py, e views.py. Você irá adicionar uma nova pasta no seu app com o nome templates, e dentro da pasta templates adionar outra pasta com o mesmo nome do seu app, assim:
+
+
+    -Seu APP
+
+      -migrations (pasta que já tem no seu app)
+  
+      -templates (pasta que você acabou de criar)
+  
+         -Seu APP (pasta que foi criada no templates, pasta acima)
+    
+         -HTML (aqui você poderá adcionar os seus arquivos HTML)
+    
+(aproveitando essa estrutura, tem alguns arquivos de configurações que você precisa adicionar no seu app, ou seja, arquivos criados na pasta principal do seu app)
+
+    -urls.py (aqui vai ficar todas as urls/caminhos que você configurar no views.py)
+
+    -serializer.py (utilizado para criação de API)
+
+    -forms.py (aqui será feito todos os campos que você deseja simplificar, por exemplo, você tem um modelo de cadastro no models.py, e para não ficar inserindo o modelo de cadastro de forma manual, é feito uma simplificação usando o forms)
+
+
 
