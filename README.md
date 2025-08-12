@@ -8,15 +8,16 @@ Um tutorial prático e completo para começar com Django do zero, incluindo boas
 📋Índice
 
 * Como Funciona o Django
-* 1° Passo: Ambiente Virutal
+* 1° Passo: Ambiente Virtual
 * 2° Passo: Instalar Dependências
-* 3° Passo: Criar Projeto Django
-* 4° Passo: Configurara Projeto
-* 5° Passo: Criar e Configurar App Django
-* 6° Passo: Branches
-* 7° Passo: Primeiro Commit Local
-* 8° Passo: Comandos Adicionais
-* 9° Passo: Criar Arquivos HTML
+* 3° Passo: Configurar o Banco de Dados
+* 4° Passo: Criar Projeto Django
+* 5° Passo: Configurar Projeto
+* 6° Passo: Criar e Configurar App Django
+* 7° Passo: Branches
+* 8° Passo: Primeiro Commit Local
+* 9° Passo: Comandos Adicionais
+* 10° Passo: Criar Arquivos HTML
 
 ## ✒️ Como Funciona o Django 
 
@@ -30,25 +31,104 @@ Primeiramente o Django é um framework web de código aberto escrito em Python. 
 >  Ideal para apps complexos e escaláveis
 
 ### 1° Passo: Ambiente Virtual 
+O ambiente virtual (venv) serve para isolar o seu projeto Python dos outros projetos e do sistema operacional, é como se fosse uma gaveta específica que você utiliza para trabalhar apenas com as ferramentas daquele projeto. No caso, aqui vamos utilizar Django, então vamos instalar todas as suas dependências e elas vão ficar armazenadas nesse ambiente virtual.
+
+Criar um ambiente virtual:
+`python -m venv venv` 
+
+Ativar ambiente virtual:
+
  **Windows**
 
-venv\Scripts\activate
+`venv\Scripts\activate`
 
  **Linux/MacOS**
 
-source venv/bin/activate
+`source venv/bin/activate`
+
+> Com esses comandos você irá notar que criou uma pasta escrito venv, e depois de ativar o ambiente virtual vai ter um (venv) no seu terminal, no início do seu prompt.
 
 ### 2° Passo: Instalar Dependências
 
-`pip install django`
+`pip install django` 
+> instalar o Django puro
 
 `pip install djangorestframework` 
-> utilizado para APIs REST 
+> instalar o Django REST Framework, utilizado para APIs REST
+
+`pip install psycopg2-binary`
+> Instalar Banco de Dados PostgreSQL
+
+`pip install django-filter` 
+> Serve para filtros avançados nas APIs
+
+`pip install python-decouple`
+> Serve para gerenciar variáveis de ambiente
+
+`pip install pillow` 
+> Instalar caso deseje fazer upload de imagens
+
+Depois de instalar todas as dependências que você for usar, salve elas utilizando o requirements.txt
 
 `pip freeze > requirements.txt`
-> gera o arquivo requirements.txt com base nas dependências que foram instaladas
 
-### 3° Passo: Criar o Projeto Django
+## 3° Passo: Configurar o Banco de Dados
+
+O banco de dados mais recomendado para Django é o PostgreSQL, então você pode instalar ele direto pelo site da PostgreSQL, mas caso esteja usando a máquina virtual (codespace) pode instalar ele pelo terminal: 
+
+`sudo apt update`
+`sudo apt install postgresql postgresql-contrib`
+`sudo service postgresql start`
+`sudo -u postgres psql`
+`ALTER USER postgres PASSWORD 'senha da sua preferência';
+CREATE DATABASE meu_projeto_db;`
+`\q`
+`psql -U postgres -h localhost`
+
+Caso escolha instalar PostgreSQL no Windows:
+https://www.postgresql.org/download/windows/
+
+Escolha a versão: PostgreSQL 16x Windows x86-64
+
+Agora a parte que pra quem não é bilíngue é um desafio, a confirmação de instalação, o que marcar e o que não marcar. Eu vou te ajudar nisso:
+
+Tela 1- Welcome: next> 
+
+Tela 2- Installation Directory: 
+  padrão: C:\Program Files\PostgreSQL\16: next> 
+  
+Tela 3- Select Components:
+  Deixe tudo marcado: next>
+  
+Tela 4- Data Directory:
+  padrão: C:\Program Files\PostgreSQL\16\data: next>
+  
+Tela 5- Password: 
+  Essa é sua senha, ela é importante e você irá precisar dela no Django: next>
+  
+Tela 6- Port: 
+  padrão: 5432: next>
+  
+Tela 7- Advanced Options:
+  Locale: Escolha Portuguese, Brazil: next> 
+  
+Tela 8- Pre Installation Summary: 
+  Revise as Configurações: next> 
+  
+Tela 9- Ready to Install: next>
+
+Tela 10- Completing Installation: Finish!
+
+Verifique se o PostgreSQL realmente foi instalado: 
+Vá em Configurações > Apps > Procure por "PostgreSQL" na lista > Deve aparecer: PostgreSQL16, pgAgent_PG16, psqlOBDC. Se acaso não aparecer sugiro que repita o processo de instalação como administrador seguindo next em tudo e instalando novamente. 
+Agora para verificar se está tudo certo, você precisa procurar nas configurações do seu computador a opção: "Variáveis de Ambiente", em seguida configurar ela, vai em "Path" e clique em "Editar", em "Novo" e digite: C:\Program Files\PostgreSQL\16\bin salve apertando em "OK" 
+Se estiver funcionando corretamente você pode acessar o CMD como administrador e digitar: `psql --version` precisa aparecer psql (PostgreSQL) 16.x
+> Para você acessar o app do PostgreSQL você pode apertar em Windows e digitar "pgAdmin", vai pedir uma senha master, porque o pgAdmin pede pra criar uma nova senha, a senha é diferente da do PostgreSQL.
+
+> [!NOTE]
+> A senha do PostgreSQL pode ser mais simples, porém se estiver fazendo em produção, hospedando o seu site Django, ela precisa ser complexa e segura. Agora a senha do pgAdmin é apenas para proteger o app, já que se alguém acessar o seu computador e abrir o pgAdmin, terá acesso a todos os seus bancos de dados, já que o pgAdmin só pede a senha na primeira vez que você abre. 
+
+### 4° Passo: Criar o Projeto Django
 
 ## Definir o nome do seu projeto
 
@@ -60,14 +140,156 @@ source venv/bin/activate
 > [!NOTE]
 > O ponto (.) serve para não criar uma pasta extra sem necessidade.
 
-### 4° Passo: Configurar o seu projeto:
+### 5° Passo: Configurar o seu Projeto:
+Agora que você acabou de criar a pasta principal do seu projeto eu vou te explicar o que são essas pastas que foram criadas automaticamente:
 
+    -meu_projeto (ou o nome que você acabou de dar pro seu projeto)
+      -init__.py (esse arquivo fica vazio, ele serve apenas para mostrar que essa pasta é um pacote python, não precisa colocar nada nele)
+      -asgi.py: É um servidor assincrônico, é utilizado quando você deseja um chat em tempo real no e-commerce, ou ter notificações push, ou ter atualizações em tempo real do estoque, aqui são as aplicações que precisam de alta performance.
+      -settings.py: é o centro de controle do seu projeto Django. É aqui onde você define todas as configurações importantes (abaixo eu explico o que você deve arrumar nesse arquivo)
+      -urls.py: Esse arquivo é o roteador principal do seu projeto, é como se fosse um GPS você dá a rota pra ele e ele direciona para o caminho certo. Quando você fizer novas funcionalidades no seu projeto precisa adicionar as URLs aqui. 
+      -wsgi.py: É padrão para servir aplicações Python na web, ele será uma interface entre seu projeto Django e o servidor web, é utilizado na produção, ou seja, quando acaba o desenvolvimento e você coloca o seu projeto em um local de hospedagem.
+
+    -manage.py: Esse é o arquivo mais importante para o desenvolvimento, ele é como um "assistente virtual" que executa os comandos do Django. 
+    (comandos mais usados: 
+          python manage.py runserver -- inicia o servidor 
+          python manage.py startapp nome_do_app -- cria o seu app 
+          python manage.py makemigrations --  cria mirações do banco de dados)
+> O manage.py é gerado automaticamente pelo Django e você não precisa editar ele. 
+    
 **Ajustar o settings.py**
-Ajustar o idioma, timezone, variáveis sensíveis (SECRET_KEY) via .env (use python-decouple ou dotenv)
-Configurar arquivos estáticos (STATICS_URL, STATICFILES_DIRS) serve para localizar os seus arquivos statics, onde é feito a parte de "Front-end", os arquivos Css, JavaScript e as imagens do seu projeto deve estar na pasta statics. 
-Criar um .gitignore para ignorar venv/ .pyc __pycache__/ .env ...
 
-### 5° Passo: Criar e Configurar um app Django:
+O arquivo `settings.py` é o centro de controle do seu projeto Django, vou te explicar quais são as informações que você precisa adicionar/alterar:
+
+1. Criar um arquivo .env
+O arquivo .env serve para esconder dados importantes, ou senhas, para que elas não fiquem expostas para ninguém que não tenha acesso.
+
+No terminal digite esses comandos:
+     `cd /workspaces/raiz_do_seu_projeto` (primeiro arquivo disponível)
+     `touch .env` -- criar o arquivo .env 
+     `code .env` -- abrir o arquivo para editar ele
+
+   Agora precisamos adicionar o conteúdo dentro deste arquivo .env. Para isso você irá precisar ir até settings.py do seu projeto e em seguida procurar essa função:
+     SECRET_KEY = "django-insecure-(senha longa com vários caracteres e símbolos)"
+   Vamos esconder essa senha no nosso arquivo .env, então na primeira linha do arquivo coloque isso:
+      SECRET_KEY=django-insecure-(senha longa com vários caracteres e símbolos
+
+Agora volte no arquivo settings e altere a senha longa e comprida para SECRET_KEY, veja só: 
+      SECRET_KEY = config('SECRET_KEY')
+
+   Vamos adicionar mais uma linha no arquivo .env:
+     DEBUG = True 
+   No settings mude essa linha para:
+     DEBUG = config('DEBUG', default=False, cast=bool)
+
+  Agora vamos adicionar os dados do banco de dados diretamente no arquivo .env, e depois vamos alterar os dados no settings:
+     
+  DATABASE_NAME=meu_projeto_db -- nome do seu banco de dados
+  DATABASE_USER=postgres
+  DATABASE_PASSWORD=senha do seu banco de dados
+  DATABASE_HOST=localhost -- normalmente isso é padrão
+  DATABASE_PORT=porta do seu banco de dados (informado no PostgreSQL)
+
+Alterando os dados do banco no settings:
+Se encontra assim:
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+
+Vamos alterar conforme o nome que determinamos no .env:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql', 
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config ('DATABASE_HOST'),
+        'PORT': config ('DATABASE_PORT'),
+    }
+}
+
+> Percebeu que o nome que colocamos no arquivo .env virou o segredo aqui no settings, exemplo:
+DATABASE_NAME=meu_projeto_db 🤝 'NAME': config('DATABASE_NAME'),
+
+> [!NOTE]
+> Após adicionar todos os dados no aquivo .env, você deve criar um arquivo chamado .gitignore e incluir o .env nele.
+
+Vamos criar o arquivo .gitignore: 
+  `touch .gitignore`
+
+Conteúdo dentro do .gitignore:
+  .env
+  venv/
+  __pycache__/
+  *.pyc
+  db.sqlite3
+  
+2. Adicionar as Importações:
+Agora que já escondemos os segredos vamos arrumar os settings desde o começo para não faltar nenhuma configuração 
+    from pathlib import Path
+    from decouple import config
+    import os  
+
+3. Altere o HOSTS:
+ALLOWED_HOSTS = []  /Altere para: ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+4. INSTALLED_APPS:
+Nessa opção você irá adicionar o seu app, ou seja, colocar o nome do seu app como primeiro da lista dessa função. Eu vou ensinar como criar um app no passo 5, que fica abaixo desse, mas você já pode colocar o nome que você quer dar pro seu app aqui, e depois criar o app de fato. As configurações desta função vão ter mais essas opções:
+
+  "nome_do_seu_app",
+  
+  'rest_framework',
+  'corsheaders', 
+  'django_filters',
+
+5. MIDDLEWARE:
+Adicione apenas uma linha no topo dessa configuração:
+  'corsheaders.middleware.CorsMiddleware', -- somente para desenvolvimento, em produção pode ocorrer grandes riscos
+
+6. Configurações Básicas de Localização:
+Você precisa ajustar o seu idioma e o fuso horário, no settings vai ter esse campo:
+   LANGUAGE_CODE = "en-us" /Altere para: LANGUAGE_CODE = "pt-br"
+
+   TIME_ZONE = "UTC"  /Altere para: TIME_ZONE = "America/Sao_Paulo"
+
+   USE_I18N = True /Pode deixar assim;
+
+   USE_TZ = True /Pode deixar assim;
+
+7. Altere e adicione as configurações dos arquivos estáticos:
+   STATIC_URL = "static/"
+   
+   Altera para:
+   STATIC_URL = "static/"
+   STATICFILES_DIRS = [
+       os.path.join(BASE_DIR, 'static'),
+   ]
+   STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+   MEDIA_URL = '/media/'
+   MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+   > Serve para arquivos de mídia (upload)
+   
+8. No final do arquivo do settings adicione as configurações do REST Framework:
+  REST_FRAMEWORK = {
+     'DEFAULT_AUTHENTICATION_CLASSES': [
+         'rest_framework.authentication.TokenAuthentication',
+     ],
+     'DEFAULT_PERMISSION_CLASSES': [
+         'rest_framework.permissions.IsAuthenticated',
+     ],
+     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+     'PAGE_SIZE': 20
+     ]
+
+10. Configurações do CORS:
+   CORS_ALLOW_ALL_ORIGINS = True -- somente para desenvolvimento
+
+   
+### 6° Passo: Criar e Configurar um app Django:
 
 `python manage.py startapp Ecomerce`
 
@@ -111,7 +333,7 @@ Você criou um app de ecommerce e adicionou um produto com o id 123
 
 * signals: Ele automatiza processos, mas deve ser utilizado com moderação, para eventualmente não travar a sua aplicação;
 
-* utils: Você armazena dados úteis que era utilizado em diferentes partes do seu projeto, mas que não pertence a models, views e forms. Então com o utils você pode validar identidade de usuário, validar idade mínima, formatar telefone ou textos, pode também redimensionar imagens, calcular valor de frete, ou calcular descontos. Quando estiver adicionando a mesma informação em diferentes arquivos, mude para o arquivo utils e import ele nos arquivos que você estava utilizando, usando a função import;
+* utils: Você armazena dados úteis que são utilizados em diferentes partes do seu projeto, mas que não pertence a models, views e forms. Então com o utils você pode validar identidade de usuário, validar idade mínima, formatar telefone ou textos, pode também redimensionar imagens, calcular valor de frete, ou calcular descontos. Quando estiver adicionando a mesma informação em diferentes arquivos, mude para o arquivo utils e import ele nos arquivos que você estava utilizando, usando a função import;
 
 * permissions: Controle de acesso, definem o que cada um pode fazer, especialmente em API REST, para proteger endpoints;
 
@@ -121,7 +343,7 @@ Você criou um app de ecommerce e adicionou um produto com o id 123
 
 * managers: Cria consultas otimizadas para os seus models, adicionando um método especial no .object. Deixando apenas produtos ativos, produtos em promoção, mais vendidos, mais baratos, ou status do pedido (entregue, pendente, enviado). Ele é importado nos models e usados na view, sendo assim ele adiciona consultas personalizadas ou predefinidas;
 
-### 6° Passo: Sobre as Branches:
+### 7° Passo: Sobre as Branches:
 
 Elas permitem criar linhas de desenvolvimento paralelas e independentes dentro de um mesmo repositório.
 
@@ -135,7 +357,7 @@ Como utilizar as Branches?
 * Branch feature: Essa é branch das novas funcionalidades, por exemplo, quero criar um ecommerce vou começar pela página inicial, ai você cria uma branch de feature/pagina-inicial, se quiser adicionar campo de produtos dentro desse e-commerce, terá que criar uma nova feature/produtos, e assim por diante, todas as novas funcionalidades sejam elas quais forem, terão que ser registradas em uma branch feature;
 * Branch bugfix: Essa branch é utilizada para correção de erros específicos, para ficar registrado o que você teve que mexer para arrumar esse erro, e também serve para identificar de onde veio esse erro;
 * Branch hotfix: Aqui são registrados os problemas urgentes, que precisam ser corrigidos o quanto antes, poderia ter utilizado a branch acima, porém isso serve para saber quantas vezes tiveram problemas críticos e urgentes no projeto, para saber o que deve ser feito a respeito disso;
-* Branch refactor: Essa branches servem para deixar registrado as melhorias, seja no estilo do botão, em algum documento, ou deixou o código mais limpo, mas sem de fato alterar o código, tudo isso é registrado na branch improvement;
+* Branch refactor: Essa branches servem para deixar registrado as melhorias, seja no estilo do botão, em algum documento, ou deixou o código mais limpo, mas sem de fato alterar o código, tudo isso é registrado na branch refactor;
   
 > [!IMPORTANT]
 >  As mudanças em uma branch em específico não altera nenhuma outra, assim podem ser feitos testes sem quebrar o código principal, e quando está trabalhando em equipe esse é um ótimo método, porque diferentes pessoas podem trabalhar em funcionalidades diferentes no projeto de forma simultânea. Além de ter uma branch para cada funcionalidade permite uma organização mais eficiente, e um entendimento do projeto mais claro para quem entrar nele depois do projeto já ter começado, simplesmente analisando os commits e o que foi feito.
@@ -165,7 +387,7 @@ Por que utilizar esse método de commit e de branches?
 Isso vai facilitar o entendimento do histórico de commits, sabendo exatamente qual commit que acabou resultando em erro no projeto, o time todo segue o mesmo padrão e todo mundo vai se entender de uma maneira muito mais fácil. A ideia é que cada commit tenha um propósito claro e seja facilmente identificável, isso torna o histórico do projeto muito mais legível e permite automatizar processos. 
 
 
-### 7° Passo: Fazer o primeiro commit local:
+### 8° Passo: Fazer o primeiro commit local:
 
 Os commits servem para organização do projeto pelo github, ou seja, é recomendado que todas as alterações que você faz no ambiente virtual deve ter um commit detalhando o que foi feito. 
 
@@ -212,7 +434,7 @@ Os commits servem para organização do projeto pelo github, ou seja, é recomen
 Também tem a opção de fazer uma merge via Pull Request no GitHub, é mais comum em projetos colaborativos.
 
 
-### 8° Passo: Comandos Adicionais:
+### 9° Passo: Comandos Adicionais:
 
 Comandos Git Básicos: 
 * `git status`: para verificar o status dos arquivos e as suas mudanças, se possuir, normalmente é utilizado depois de entrar na branch que você deseja (git checkout), e antes do comando git add . 
@@ -239,9 +461,12 @@ Exemplo: Running migrations:
 Por exemplo: 0001 – eu quero essa;
 0002 – quero excluir essa;
 
+* `python manage.py createsuperuser`: para criar um usuário admin, com acesso ao painel de administrador que o Django cria automaticamente;
+
+  
 > Parece haver bastantes comandos agora, mas depois que isso entra na sua cabeça fica a coisa mais fácil de programar utilizando o django.😁
 
-## Criar arquivos HTML
+## 10° Passo: Criar arquivos HTML
 
 Você irá adicionar uma nova pasta no seu app com o nome templates, e dentro da pasta templates adicionar outra pasta com o mesmo nome do seu app, assim:
 
@@ -265,5 +490,3 @@ Você irá adicionar uma nova pasta no seu app com o nome templates, e dentro da
             -checkout 
          
 Isso serve para que não tenha conflitos com outros apps que você queira adicionar no seu projeto, até mesmo se você não tiver a intenção de criar outro app é recomendado fazer dessa maneira por deixar a estrutura mais clara e por boas práticas.
-
-
