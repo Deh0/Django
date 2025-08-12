@@ -18,7 +18,7 @@ Um tutorial prático e completo para começar com Django do zero, incluindo boas
 * 8° Passo: Comandos Adicionais
 * 9° Passo: Criar Arquivos HTML
 
-# ✒️ Como Funciona o Django 
+## ✒️ Como Funciona o Django 
 
 Primeiramente o Django é um framework web de código aberto escrito em Python. Ele é usado por grandes sites por motivos de ser um framework full-stack, robusto, com sistemas integrados de:
 
@@ -27,9 +27,9 @@ Primeiramente o Django é um framework web de código aberto escrito em Python. 
 * Painel Administrativo
 * Segurança Integrada
 
-Ideal para apps complexos e escaláveis
+>  Ideal para apps complexos e escaláveis
 
-# 1° Passo: Ambiente Virtual 
+### 1° Passo: Ambiente Virtual 
  **Windows**
 
 venv\Scripts\activate
@@ -38,38 +38,41 @@ venv\Scripts\activate
 
 source venv/bin/activate
 
-# 2° Passo: Instalar Dependências
+### 2° Passo: Instalar Dependências
 
-pip install django 
+`pip install django`
 
-pip install djangorestframework -- utilizado para APIs REST 
+`pip install djangorestframework` 
+> utilizado para APIs REST 
 
-pip freeze > requirements.txt (gerar o arquivo requirements.txt com base nas dependências que foram instaladas)
+`pip freeze > requirements.txt`
+> gera o arquivo requirements.txt com base nas dependências que foram instaladas
 
-# 3° Passo: Criar o Projeto Django
+### 3° Passo: Criar o Projeto Django
 
-**Definir o nome do seu projeto**
+## Definir o nome do seu projeto
 
-django-admin startproject (qualquer nome que você colocar no seu projeto) .
+`django-admin startproject` (qualquer nome que você colocar no seu projeto) .
 
-Exemplo: django-admin startproject meu-projeto . 
+> [!TIP]
+> Exemplo: django-admin startproject meu-projeto .
 
-O ponto (.) serve para não criar uma pasta extra sem necessidade.
+> [!NOTE]
+> O ponto (.) serve para não criar uma pasta extra sem necessidade.
 
-# 4° Passo: Configurar o seu projeto:
+### 4° Passo: Configurar o seu projeto:
 
 **Ajustar o settings.py**
 Ajustar o idioma, timezone, variáveis sensíveis (SECRET_KEY) via .env (use python-decouple ou dotenv)
 Configurar arquivos estáticos (STATICS_URL, STATICFILES_DIRS) serve para localizar os seus arquivos statics, onde é feito a parte de "Front-end", os arquivos Css, JavaScript e as imagens do seu projeto deve estar na pasta statics. 
 Criar um .gitignore para ignorar venv/ .pyc __pycache__/ .env ...
 
-# 5° Passo: Criar um app Django:
+### 5° Passo: Criar e Configurar um app Django:
 
-python manage.py startapp Ecomerce 
+`python manage.py startapp Ecomerce`
 
-# 6° Passo: Configurar arquivos do seu APP:
-
-Aqui é o seu app, pode colocar o nome que você quiser, ele terá pastas diferentes das do seu projeto django. Vou te mostrar todas as pastas do seu app, algumas você terá que adicionar manualmente, em adicionar novo arquivo (dentro do seu app) e terminar todos eles com py (para mostrar que são arquivos em python) vou te explicar pra que cada uma delas serve:
+> [!IMPORTANT]
+> Aqui é o seu app, pode colocar o nome que você quiser, ele terá pastas diferentes das do seu projeto django. Vou te mostrar todas as pastas do seu app, algumas você terá que adicionar manualmente, em adicionar novo arquivo (dentro do seu app) e terminar todos eles com py (para mostrar que são arquivos em python) vou te explicar pra que cada uma delas serve:
 
 * init: Esse arquivo você nem precisa mexer ou adicionar qualquer coisa nele, só caso seja necessário, ele serve para informar que esta pasta do django é um arquivo em Python;
 
@@ -86,7 +89,8 @@ Aqui é o seu app, pode colocar o nome que você quiser, ele terá pastas difere
 * urls: A url padrão do projeto é diferente da urls do seu app, a url do seu projeto ela informa e distribui o tráfego do seu projeto inteiro, já a do seu app que você terá que adicionar de forma manual, será onde define as rotas específicas do seu app, como todas as rotas que seu produto pode fazer, as rotas do carrinho e as rotas dos pedidos;  
 Porém tem uma informação adicional, à views e a urls dentro do seu app vão sempre estar ligadas uma na outra, ou seja, todos os dados que você adicionar na views você irá precisar configurar eles na urls do seu app, então segue uma dica, todas as vezes que você adicionar um modelo novo no models.py, já adicione a lógica dele na views e configure as urls que esse modelo pode fazer;
 
-Para entender bem essa parte: 
+> [!WARNING]
+> Para entender bem essa parte, vou usar um exemplo:
 Você criou um app de ecommerce e adicionou um produto com o id 123
 
 1 - O usuário se interessou por esse produto e apertou nele
@@ -117,7 +121,7 @@ Você criou um app de ecommerce e adicionou um produto com o id 123
 
 * managers: Cria consultas otimizadas para os seus models, adicionando um método especial no .object. Deixando apenas produtos ativos, produtos em promoção, mais vendidos, mais baratos, ou status do pedido (entregue, pendente, enviado). Ele é importado nos models e usados na view, sendo assim ele adiciona consultas personalizadas ou predefinidas;
 
-# 7° Passo: Sobre as Branches:
+### 6° Passo: Sobre as Branches:
 
 Elas permitem criar linhas de desenvolvimento paralelas e independentes dentro de um mesmo repositório.
 
@@ -132,11 +136,12 @@ Como utilizar as Branches?
 * Branch bugfix: Essa branch é utilizada para correção de erros específicos, para ficar registrado o que você teve que mexer para arrumar esse erro, e também serve para identificar de onde veio esse erro;
 * Branch hotfix: Aqui são registrados os problemas urgentes, que precisam ser corrigidos o quanto antes, poderia ter utilizado a branch acima, porém isso serve para saber quantas vezes tiveram problemas críticos e urgentes no projeto, para saber o que deve ser feito a respeito disso;
 * Branch refactor: Essa branches servem para deixar registrado as melhorias, seja no estilo do botão, em algum documento, ou deixou o código mais limpo, mas sem de fato alterar o código, tudo isso é registrado na branch improvement;
-
-  As mudanças em uma branch em específico não altera nenhuma outra, assim podem ser feitos testes sem quebrar o código principal, e quando está trabalhando em equipe esse é um ótimo método, porque diferentes pessoas podem trabalhar em funcionalidades diferentes no projeto de forma simultânea. Além de ter uma branch para cada funcionalidade permite uma organização mais eficiente, e um entendimento do projeto mais claro para quem entrar nele depois do projeto já ter começado, simplesmente analisando os commits e o que foi feito.
+  
+> [!IMPORTANT]
+>  As mudanças em uma branch em específico não altera nenhuma outra, assim podem ser feitos testes sem quebrar o código principal, e quando está trabalhando em equipe esse é um ótimo método, porque diferentes pessoas podem trabalhar em funcionalidades diferentes no projeto de forma simultânea. Além de ter uma branch para cada funcionalidade permite uma organização mais eficiente, e um entendimento do projeto mais claro para quem entrar nele depois do projeto já ter começado, simplesmente analisando os commits e o que foi feito.
 
 Conventional Commits é uma especificação para padronizar mensagens de commit, facilitando a leitura do histórico e automatização de processos.
-Exemplo: git commit -m "feat: Criação da página inicial"
+Exemplo: `git commit -m "feat: Criação da página inicial"`
 
 * feat: nova funcionalidade para o usuário, serve para quando você adicionar algo novo que o usuário final possa usar;
 * fix: correção de bugs, resolve os problemas existentes no código;
@@ -151,7 +156,8 @@ refactor: Mudança no código que não adiciona funcionalidade nem corrige bugs,
 * ci: Mudanças nos arquivos de CI/CD (integração contínua/entrega contínua), esse tópico vai ser explicado futuramente, porque é muito útil para o Django, são os arquivos do actions os workflows;
 revert: Quando você fizer um commit e por algum motivo não era isso que você queria fazer, pode usar o revert para reverter o commit anterior;
 
-Pode usar parênteses para especificar ainda mais o que você acabou de fazer.
+> [!NOTE]
+> Pode usar parênteses para especificar ainda mais o que você acabou de fazer.
 Exemplo: fix(api): corrigir validação de email da API REST
 
 Por que utilizar esse método de commit e de branches? 
@@ -159,69 +165,83 @@ Por que utilizar esse método de commit e de branches?
 Isso vai facilitar o entendimento do histórico de commits, sabendo exatamente qual commit que acabou resultando em erro no projeto, o time todo segue o mesmo padrão e todo mundo vai se entender de uma maneira muito mais fácil. A ideia é que cada commit tenha um propósito claro e seja facilmente identificável, isso torna o histórico do projeto muito mais legível e permite automatizar processos. 
 
 
-# 8° Passo: Fazer o primeiro commit local:
+### 7° Passo: Fazer o primeiro commit local:
 
-Os commits servem para organização do projeto pelo github, ou seja, é recomendado que todas as alterações que você faz no ambiente virtual deve ter um commit detalhando o que foi feito
+Os commits servem para organização do projeto pelo github, ou seja, é recomendado que todas as alterações que você faz no ambiente virtual deve ter um commit detalhando o que foi feito. 
 
 (passo 3° )
 
-* cd (o nome do seu projeto) -- esse comando serve para você mudar o caminho do seu terminal, ou seja, ele te coloca dentro do seu projeto e todos os comandos que você faz depois disso estão dentro do seu projeto;
+* `cd` (o nome do seu projeto)
+> esse comando serve para você mudar o caminho do seu terminal, ou seja, ele te coloca dentro do seu projeto e todos os comandos que você faz depois disso estão dentro do seu projeto;
 
-* git init -- esse comando serve para inicializar o seu repositório do Git e organizar ele;
+* `git init`
+> esse comando serve para inicializar o seu repositório do Git e organizar ele;
 
-* git branch -- esse comando serve para você saber em qual branch você está;
+* `git branch`
+> esse comando serve para você saber em qual branch você está;
 
-* git checkout -b development (mais antigo)
-  git branch development (mais comum)
-  git switch -c development (mais moderno)
--- estes comandos servem para criar uma branch de desenvolvimento, onde você irá integrar as funcionalidades, mas com esse comando você pode criar qualquer branch;
+* `git checkout -b development`(mais antigo)
+  `git branch development`(mais comum)
+  `git switch -c development`(mais moderno)
+> estes comandos servem para criar uma branch de desenvolvimento, onde você irá integrar as funcionalidades, mas com esse comando você pode criar qualquer branch;
 
-* git checkout -b feature/pagina-inicial -- a branch feature serve para criar novas funcionalidades, como adicionar uma cor de botão nova, ou criar a página inicial, a página de login. Tudo isso você vai documentar como uma nova funcionalidade. Na parte de pagina-inicial será o campo onde você irá mencionar o que essa funcionalidade irá fazer;
+* `git checkout -b feature/pagina-inicial`
+> [!IMPORTANT]
+> a branch feature serve para criar novas funcionalidades, como adicionar uma cor de botão nova, ou criar a página inicial, a página de login. Tudo isso você vai documentar como uma nova funcionalidade. Na parte de pagina-inicial será o campo onde você irá mencionar o que essa funcionalidade irá fazer;
 
-* git add . -- adicionar tudo que aconteceu até agora, por exemplo, esse é o seu primeiro commit então estará adicionando a estrutura que você acabou de criar no django;
+* `git add .`
+> adicionar tudo que aconteceu até agora, por exemplo, esse é o seu primeiro commit então estará adicionando a estrutura que você acabou de criar no django;
 
-* git commit -m "feat: Começando aplicação django, e organizando a estrutura" -- o feat serve para identificar que você está adicionando uma nova funcionalidade, e o commit serve para você deixar registrado no sistema o que você fez (isso é explicado na parte de commits);
+* `git commit -m "feat: Começando aplicação django, e organizando a estrutura"`
+> [!NOTE]
+>  o feat serve para identificar que você está adicionando uma nova funcionalidade, e o commit serve para você deixar registrado no sistema o que você fez (isso é explicado na parte de commits);
 
-* git push origin feature/pagina-inicial -- enviar os dados que você acabou de comentar para o GitHub, você sempre irá dar push nas branchs que você criou anteriormente, ou seja, se você tinha feito isso na branch feature/login precisa finalizar ela aqui;
+* `git push origin feature/pagina-inicial`
+> enviar os dados que você acabou de comentar para o GitHub, você sempre irá dar push nas branchs que você criou anteriormente, ou seja, se você tinha feito isso na branch feature/login precisa finalizar ela aqui;
 
-* git checkout development -- voltar para a branch development;
+* `git checkout development`
+> voltar para a branch development;
 
-* git merge feature/pagina-inicial -- o comando merge serve para combinar o conteúdo de uma branch para outra, com isso agora você sabe que as branchs não estão sincronizadas e precisam ser feito merge para adicionar as suas alterações para a branch desejada, por exemplo, como é seu primeiro commit a suas alterações são na realidade a estrutura do django que você acabou de criar, então pode jogar na branch principal (main), mas quando são coisas que precisam ser passadas por um teste ou uma verificação antes, precisa ser passado para a branch development antes, por motivos de segurança, para não quebrar o código na branch principal;
+* `git merge feature/pagina-inicial`
+> [!IMPORTANT]
+> o comando merge serve para combinar o conteúdo de uma branch para outra, com isso agora você sabe que as branchs não estão sincronizadas e precisam ser feito merge para adicionar as suas alterações para a branch desejada, por exemplo, como é seu primeiro commit a suas alterações são na realidade a estrutura do django que você acabou de criar, então pode jogar na branch principal (main), mas quando são coisas que precisam ser passadas por um teste ou uma verificação antes, precisa ser passado para a branch development antes, por motivos de segurança, para não quebrar o código na branch principal;
 
-* git push origin development -- manda os dados que você acabou de receber da merge que acabou de fazer para o GitHub;
+* `git push origin development`
+> manda os dados que você acabou de receber da merge que acabou de fazer para o GitHub;
 
 Também tem a opção de fazer uma merge via Pull Request no GitHub, é mais comum em projetos colaborativos.
 
 
-# 9° Passo: Comandos Adicionais:
+### 8° Passo: Comandos Adicionais:
 
 Comandos Git Básicos: 
-* git status: para verificar o status dos arquivos e as suas mudanças, se possuir, normalmente é utilizado depois de entrar na branch que você deseja (git checkout), e antes do comando git add . 
+* `git status`: para verificar o status dos arquivos e as suas mudanças, se possuir, normalmente é utilizado depois de entrar na branch que você deseja (git checkout), e antes do comando git add . 
 
-* git log --oneline: para ver histórico resumido, serve para ver todos os commits, desde o primeiro;
+* `git log --oneline`: para ver histórico resumido, serve para ver todos os commits, desde o primeiro;
 
-* python manage.py test: realizar testes;
+* `python manage.py test`: realizar testes;
 
 Comandos Django - Migrations: 
-Antes de rodar os comandos abaixo, precisa salvar as alterações que você fez no GitHub, e realizar testes do banco de dados no arquivo de test.py do arquivo do app, e após isso você salva as alterações do banco de dados.
+> [!WARNING]
+> Antes de rodar os comandos abaixo, precisa salvar as alterações que você fez no GitHub, e realizar testes do banco de dados no arquivo de test.py do arquivo do app, e após isso você salva as alterações do banco de dados.
 
-* python manage.py makemigrations: serve para detectar mudanças no models, aqui é onde informa as mudanças no arquivo migrations no seu app, onde tem as instruções SQL necessárias;
+* `python manage.py makemigrations`: serve para detectar mudanças no models, aqui é onde informa as mudanças no arquivo migrations no seu app, onde tem as instruções SQL necessárias;
 
-* python manage.py migrate: Aqui é onde de fato faz as alterações no banco de dados, ou seja, se você adiciona ou altera alguma tabela no models, será adicionado com esse comando, quando efetuado esse comando, no terminal irá constar as alterações com um OK verde do lado:
+* `python manage.py migrate`: Aqui é onde de fato faz as alterações no banco de dados, ou seja, se você adiciona ou altera alguma tabela no models, será adicionado com esse comando, quando efetuado esse comando, no terminal irá constar as alterações com um OK verde do lado:
 Exemplo: Running migrations:
   Applying myapp.0001_initial... OK
 
-* python manage.py showmigrations: Ver as migrações pendentes;
+* `python manage.py showmigrations`: Ver as migrações pendentes;
 
-* python manage.py makemigrations nome_do_app: Caso tenha mais de um app e tenha feito alteração somente em um, utilizar o nome do seu app no final do comando;
+* `python manage.py makemigrations nome_do_app`: Caso tenha mais de um app e tenha feito alteração somente em um, utilizar o nome do seu app no final do comando;
 
-* python manage.py migrate nome_do_app 0001: se a caso você se arrepender de ter feito alguma alteração, poderá ver as alterações no migrations, e selecionar aquela na qual você deseja voltar:
+* `python manage.py migrate nome_do_app 0001`: se a caso você se arrepender de ter feito alguma alteração, poderá ver as alterações no migrations, e selecionar aquela na qual você deseja voltar:
 Por exemplo: 0001 – eu quero essa;
 0002 – quero excluir essa;
 
-Parece haver bastantes comandos agora, mas depois que isso entra na sua cabeça fica a coisa mais fácil de programar utilizando o django.😁
+> Parece haver bastantes comandos agora, mas depois que isso entra na sua cabeça fica a coisa mais fácil de programar utilizando o django.😁
 
-# Criar arquivos HTML
+## Criar arquivos HTML
 
 Você irá adicionar uma nova pasta no seu app com o nome templates, e dentro da pasta templates adicionar outra pasta com o mesmo nome do seu app, assim:
 
