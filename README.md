@@ -165,51 +165,62 @@ O arquivo `settings.py` é o centro de controle do seu projeto Django, vou te ex
 O arquivo .env serve para esconder dados importantes, ou senhas, para que elas não fiquem expostas para ninguém que não tenha acesso.
 
 No terminal digite esses comandos:
+
      `cd /workspaces/raiz_do_seu_projeto` (primeiro arquivo disponível)
+     
      `touch .env` -- criar o arquivo .env 
+     
      `code .env` -- abrir o arquivo para editar ele
 
    Agora precisamos adicionar o conteúdo dentro deste arquivo .env. Para isso você irá precisar ir até settings.py do seu projeto e em seguida procurar essa função:
+   
      SECRET_KEY = "django-insecure-(senha longa com vários caracteres e símbolos)"
+     
    Vamos esconder essa senha no nosso arquivo .env, então na primeira linha do arquivo coloque isso:
+   
       SECRET_KEY=django-insecure-(senha longa com vários caracteres e símbolos
 
 Agora volte no arquivo settings e altere a senha longa e comprida para SECRET_KEY, veja só: 
+
       SECRET_KEY = config('SECRET_KEY')
 
    Vamos adicionar mais uma linha no arquivo .env:
+   
      DEBUG = True 
    No settings mude essa linha para:
+   
      DEBUG = config('DEBUG', default=False, cast=bool)
 
   Agora vamos adicionar os dados do banco de dados diretamente no arquivo .env, e depois vamos alterar os dados no settings:
      
-  DATABASE_NAME=meu_projeto_db -- nome do seu banco de dados
-  DATABASE_USER=postgres
-  DATABASE_PASSWORD=senha do seu banco de dados
-  DATABASE_HOST=localhost -- normalmente isso é padrão
-  DATABASE_PORT=porta do seu banco de dados (informado no PostgreSQL)
+    DATABASE_NAME=meu_projeto_db -- nome do seu banco de dados
+    DATABASE_USER=postgres
+    DATABASE_PASSWORD=senha do seu banco de dados
+    DATABASE_HOST=localhost -- normalmente isso é padrão
+    DATABASE_PORT=porta do seu banco de dados (informado no PostgreSQL)
 
 Alterando os dados do banco no settings:
 Se encontra assim:
-DATABASES = {
-    "default": {
+   
+     DATABASES = {
+      "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+      }
     }
-}
 
 Vamos alterar conforme o nome que determinamos no .env:
-DATABASES = {
-    'default': {
+      
+    DATABASES = {
+     'default': {
         'ENGINE': 'django.db.backends.postgresql', 
         'NAME': config('DATABASE_NAME'),
         'USER': config('DATABASE_USER'),
         'PASSWORD': config('DATABASE_PASSWORD'),
         'HOST': config ('DATABASE_HOST'),
         'PORT': config ('DATABASE_PORT'),
-    }
-}
+        }
+      }
 
 > Percebeu que o nome que colocamos no arquivo .env virou o segredo aqui no settings, exemplo:
 DATABASE_NAME=meu_projeto_db 🤝 'NAME': config('DATABASE_NAME'),
@@ -218,80 +229,98 @@ DATABASE_NAME=meu_projeto_db 🤝 'NAME': config('DATABASE_NAME'),
 > Após adicionar todos os dados no aquivo .env, você deve criar um arquivo chamado .gitignore e incluir o .env nele.
 
 Vamos criar o arquivo .gitignore: 
-  `touch .gitignore`
+  `touch .gitignore` our 
+  `echo. > .gitignore`
 
 Conteúdo dentro do .gitignore:
-  .env
-  venv/
-  __pycache__/
-  *.pyc
-  db.sqlite3
+
+    .env
+    venv/
+    __pycache__/
+    *.pyc
+    db.sqlite3
+
+Ver se o .env está protegido: 
+
+  `git status`
+> Se aparecer o arquivo .env na lista ele não está protegido, caso ele não apreça, está tudo certo 🤙
   
 2. Adicionar as Importações:
-Agora que já escondemos os segredos vamos arrumar os settings desde o começo para não faltar nenhuma configuração 
-    from pathlib import Path
-    from decouple import config
-    import os  
+Agora que já escondemos os segredos vamos arrumar os settings desde o começo para não faltar nenhuma configuração:
 
-3. Altere o HOSTS:
+        from pathlib import Path
+        from decouple import config
+        import os  
+
+2. Altere o HOSTS:
+   
 ALLOWED_HOSTS = []  /Altere para: ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-4. INSTALLED_APPS:
-Nessa opção você irá adicionar o seu app, ou seja, colocar o nome do seu app como primeiro da lista dessa função. Eu vou ensinar como criar um app no passo 5, que fica abaixo desse, mas você já pode colocar o nome que você quer dar pro seu app aqui, e depois criar o app de fato. As configurações desta função vão ter mais essas opções:
+3. INSTALLED_APPS:
+   
+Nessa opção você irá adicionar o seu app, ou seja, colocar o nome do seu app como primeiro da lista dessa função. Eu vou ensinar como criar um app no passo 5, que fica abaixo desse. Você só poderá adicionar o seu app após criar ele, se já adicionar nesse campo pode eventualmente acontecer erro, porque o Django vai procurar um app que não existe. As configurações desta função vão ter mais essas opções:
 
-  "nome_do_seu_app",
+    "nome_do_seu_app",
   
-  'rest_framework',
-  'corsheaders', 
-  'django_filters',
+    'rest_framework',
+    'corsheaders', 
+    'django_filters',
 
-5. MIDDLEWARE:
+4. MIDDLEWARE:
+   
 Adicione apenas uma linha no topo dessa configuração:
   'corsheaders.middleware.CorsMiddleware', -- somente para desenvolvimento, em produção pode ocorrer grandes riscos
 
-6. Configurações Básicas de Localização:
+5. Configurações Básicas de Localização:
 Você precisa ajustar o seu idioma e o fuso horário, no settings vai ter esse campo:
-   LANGUAGE_CODE = "en-us" /Altere para: LANGUAGE_CODE = "pt-br"
 
-   TIME_ZONE = "UTC"  /Altere para: TIME_ZONE = "America/Sao_Paulo"
+       LANGUAGE_CODE = "en-us" /Altere para: LANGUAGE_CODE = "pt-br"
 
-   USE_I18N = True /Pode deixar assim;
+       TIME_ZONE = "UTC"  /Altere para: TIME_ZONE = "America/Sao_Paulo"
 
-   USE_TZ = True /Pode deixar assim;
+       USE_I18N = True /Pode deixar assim;
+
+       USE_TZ = True /Pode deixar assim;
 
 7. Altere e adicione as configurações dos arquivos estáticos:
-   STATIC_URL = "static/"
-   
-   Altera para:
-   STATIC_URL = "static/"
-   STATICFILES_DIRS = [
-       os.path.join(BASE_DIR, 'static'),
-   ]
-   STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-   MEDIA_URL = '/media/'
-   MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+       STATIC_URL = "static/"
+   
+    Altera para:
+   
+       STATIC_URL = "static/"
+       STATICFILES_DIRS = [
+       os.path.join(BASE_DIR, 'static'),
+       ]
+       STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+       MEDIA_URL = '/media/'
+       MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
    > Serve para arquivos de mídia (upload)
    
 8. No final do arquivo do settings adicione as configurações do REST Framework:
-  REST_FRAMEWORK = {
-     'DEFAULT_AUTHENTICATION_CLASSES': [
-         'rest_framework.authentication.TokenAuthentication',
-     ],
-     'DEFAULT_PERMISSION_CLASSES': [
+    
+        REST_FRAMEWORK = {
+           'DEFAULT_AUTHENTICATION_CLASSES': [
+               'rest_framework.authentication.TokenAuthentication',
+        ],
+       'DEFAULT_PERMISSION_CLASSES': [
          'rest_framework.permissions.IsAuthenticated',
-     ],
-     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-     'PAGE_SIZE': 20
-     ]
+       ],
+       'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+       'PAGE_SIZE': 20
+       }
 
-10. Configurações do CORS:
+9. Configurações do CORS:
+   
    CORS_ALLOW_ALL_ORIGINS = True -- somente para desenvolvimento
 
    
 ### 6° Passo: Criar e Configurar um app Django:
 
 `python manage.py startapp Ecomerce`
+> [!WARNING]
+> Não esqueça de adicionar o nome do seu app em INSTALLED_APPS agora pode.
 
 > [!IMPORTANT]
 > Aqui é o seu app, pode colocar o nome que você quiser, ele terá pastas diferentes das do seu projeto django. Vou te mostrar todas as pastas do seu app, algumas você terá que adicionar manualmente, em adicionar novo arquivo (dentro do seu app) e terminar todos eles com py (para mostrar que são arquivos em python) vou te explicar pra que cada uma delas serve:
@@ -343,6 +372,8 @@ Você criou um app de ecommerce e adicionou um produto com o id 123
 
 * managers: Cria consultas otimizadas para os seus models, adicionando um método especial no .object. Deixando apenas produtos ativos, produtos em promoção, mais vendidos, mais baratos, ou status do pedido (entregue, pendente, enviado). Ele é importado nos models e usados na view, sendo assim ele adiciona consultas personalizadas ou predefinidas;
 
+* Pastas: templates/statics: Serve para você armazenar os seus arquivos HTML, e seus arquivos Css, javaScript e etc. Será explicado no passo 10
+  
 ### 7° Passo: Sobre as Branches:
 
 Elas permitem criar linhas de desenvolvimento paralelas e independentes dentro de um mesmo repositório.
@@ -393,8 +424,8 @@ Os commits servem para organização do projeto pelo github, ou seja, é recomen
 
 (passo 3° )
 
-* `cd` (o nome do seu projeto)
-> esse comando serve para você mudar o caminho do seu terminal, ou seja, ele te coloca dentro do seu projeto e todos os comandos que você faz depois disso estão dentro do seu projeto;
+* `cd ..`
+> esse comando serve para você mudar o caminho do seu terminal, ou seja, ele faz você ir para a raiz da sua pasta
 
 * `git init`
 > esse comando serve para inicializar o seu repositório do Git e organizar ele;
